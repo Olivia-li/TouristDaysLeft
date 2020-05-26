@@ -1,5 +1,5 @@
 # Tourist Days Left
-Google maps is constantly tracking my location data and it's probably constantly tracking yours too! With all this data I decided to make a program that figures out how many of my 182 tourist days I have left in the year so I don't illegally overstay in the US and now you can too! Go Big Brother!!! 
+Google maps is constantly tracking my location data and it's probably constantly tracking yours too! With all this data I made a program that determines how many of my 182 tourist days in the US I have left in the year so I don't illegally overstay and now you can too! Go Big Brother!!! 
 
 ## Get your location data
 Go to [Google Takeout](https://takeout.google.com/settings/takeout) and check "Location History". Download your location data as a JSON file. 
