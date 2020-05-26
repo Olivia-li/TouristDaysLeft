@@ -3,7 +3,7 @@ import sys
 from datetime import datetime
 import requests
 
-YOUR_API_KEY =
+YOUR_API_KEY = "ADD YOUR API KEY HERE"
 
 
 def getPastYearFiles(date):
@@ -37,7 +37,7 @@ def removeHourlyData(entries):
         timestamp = item["placeVisit"]["duration"]["startTimestampMs"]
         timestamp = int(timestamp) // 1000
         date = datetime.fromtimestamp(timestamp)
-        if date.hour != previous_date.hour and date.day != previous_date.day or date.month != previous_date.month or date.year != previous_date.year:
+        if date.hour != previous_date.hour or date.day != previous_date.day or date.month != previous_date.month or date.year != previous_date.year:
             cleaned_list.append(item)
             previous_date = date
     return cleaned_list
@@ -45,7 +45,6 @@ def removeHourlyData(entries):
 
 def getCountry(place_id, country_code):
     url = f'https://maps.googleapis.com/maps/api/place/details/json?key={YOUR_API_KEY}&place_id={place_id}'
-    print(url)
     response = requests.get(url)
     res = json.loads(response.text)
     if res["status"] == "OK":
@@ -57,12 +56,28 @@ def getCountry(place_id, country_code):
 
 def entrysInAmerica(entries):
     lst = []
+    progress = len(entries)
     for entry in entries:
         place_id = entry["placeVisit"]["location"]["placeId"]
+        progress -= 1
+        print(f'{progress} left!')
         if getCountry(place_id, "us"):
             lst.append(entry)
     return lst
 
+def daysInAmerica(entries):
+    temp = int(entries["timestampMs"])//1000
+    previous_date = datetime.fromtimestamp(temp)
+    cleaned_list = []
+    for item in entries[1:]:
+        timestamp = item["timestampMs"]
+        timestamp = int(timestamp) // 1000
+        date = datetime.fromtimestamp(timestamp)
+        print(date)
+        if date.day != previous_date.day or date.month != previous_date.month or date.year != previous_date.year:
+            cleaned_list.append(item)
+            previous_date = date
+    return cleaned_list
 
 
 a = getPastYearFiles("05-20-2020")
@@ -73,6 +88,9 @@ c = removeHourlyData(b)
 print(len(c))
 d = entrysInAmerica(b)
 print(len(d))
+e = daysInAmerica(d)
+print(f'Days spend in the US: {len(e)}')
+print(f'Tourist Days left in the US: {182 - len(e)}')
 
 
 
@@ -115,6 +133,5 @@ print(len(d))
 # a = getDataAfter(1588710148056)
 # b = entrysInAmerica(a)
 # c = getDayData(b)
-# print(f'Days spend in the US: {len(c)}')
-# print(f'Tourist Days left in the US: {182 - len(c)}')
+
 
