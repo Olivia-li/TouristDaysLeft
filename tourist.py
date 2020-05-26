@@ -1,9 +1,8 @@
 import json
-import sys
 from datetime import datetime
 import requests
 
-YOUR_API_KEY = "ADD YOUR API KEY HERE"
+YOUR_API_KEY = "API KEY HERE"
 
 
 def getPastYearFiles(date):
@@ -17,7 +16,7 @@ def getPastYearFiles(date):
             lst.append(f'{date_object.year-1}/{date_object.year-1}_{month.upper()}.json')
     return lst
 
-def getCleanedData(file_names):
+def filesPastYear(file_names):
     lst = []
     for date in file_names:
         with open(date) as json_file:
@@ -54,7 +53,7 @@ def getCountry(place_id, country_code):
         return False
 
 
-def entrysInAmerica(entries):
+def entriesInAmerica(entries):
     lst = []
     progress = len(entries)
     for entry in entries:
@@ -66,11 +65,11 @@ def entrysInAmerica(entries):
     return lst
 
 def daysInAmerica(entries):
-    temp = int(entries["timestampMs"])//1000
+    temp = int(entries[0]["placeVisit"]["duration"]["startTimestampMs"])//1000
     previous_date = datetime.fromtimestamp(temp)
     cleaned_list = []
     for item in entries[1:]:
-        timestamp = item["timestampMs"]
+        timestamp = item["placeVisit"]["duration"]["startTimestampMs"]
         timestamp = int(timestamp) // 1000
         date = datetime.fromtimestamp(timestamp)
         print(date)
@@ -79,59 +78,19 @@ def daysInAmerica(entries):
             previous_date = date
     return cleaned_list
 
-
-a = getPastYearFiles("05-20-2020")
-b= getCleanedData(a)
-print(len(b))
-print(b)
-c = removeHourlyData(b)
-print(len(c))
-d = entrysInAmerica(b)
-print(len(d))
-e = daysInAmerica(d)
-print(f'Days spend in the US: {len(e)}')
-print(f'Tourist Days left in the US: {182 - len(e)}')
+def getInput():
+    date = input("Input your date in this format: MM-DD-YYYY \n")
+    return date
 
 
+if __name__ == "__main__":
+    date = getInput()
+    files_past_year = filesPastYear(date)
+    no_hour_repeats = removeHourlyData(files_past_year)
+    entries_in_America = entriesInAmerica(no_hour_repeats)
+    days = daysInAmerica(entries_in_America)
+    print(f'Days spend in the US: {len(days)}')
+    print(f'Tourist Days left in the US: {182 - len(days)}')
 
-
-
-
-
-
-#
-# def getYearData(date):
-#     lst = []
-#     for entry in data_dictionary:
-#         if int(entry["timestampMs"]) >= int(timeStamp):
-#             lst.append(entry)
-#     return lst
-#
-# def getDayData(lst):
-    # temp = int(lst["timestampMs"])//1000
-    # previous_date = datetime.fromtimestamp(temp)
-    # cleaned_list = []
-    # for item in lst[1:]:
-    #     timestamp = item["timestampMs"]
-    #     timestamp = int(timestamp) // 1000
-    #     date = datetime.fromtimestamp(timestamp)
-    #     print(date)
-    #     if date.day != previous_date.day or date.month != previous_date.month or date.year != previous_date.year:
-    #         cleaned_list.append(item)
-    #         previous_date = date
-    # return cleaned_list
-#
-
-#
-# # if __name__ == "__main__":
-# #     a = getDataAfter(sys.argv[0])
-# #     b = entrysInAmerica(a)
-# #     c = getDayData(b)
-# #     print(f'Days spend in the US: {len(c)}')
-# #     print(f'Tourist Days left in the US: {182 - len(c)}')
-#
-# a = getDataAfter(1588710148056)
-# b = entrysInAmerica(a)
-# c = getDayData(b)
 
 
