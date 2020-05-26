@@ -8,7 +8,9 @@ Go to [Google Takeout](https://takeout.google.com/settings/takeout) and check "L
 Cool, now that you have your data, install all the necessary stuffs needed to run this script. 
 1) In your terminal `cd` into whatever directory you want to clone my repository and run `git clone https://github.com/Olivia-li/TouristDaysLeft.git`. 
 2) We'll be using the Python modules `datetime`, `requests`. If you don't have these libraries installed run the following commands in your terminal: `pip install DateTime` and `pip install requests`
-3) Find the "Takeout" folder that you downloaded from Google Takeout and pop that bad boy inside the repository folder
+3) Go to [Google's "Get an API Key" guide](https://developers.google.com/places/web-service/get-api-key) and get yourself an API key
+4) Open up `tourist.py` and you should see `YOUR_API_KEY = "API KEY HERE"` at the top of the file. Replace `"API KEY HERE"` with the API key that you got from the previous step. 
+5) Find the "Takeout" folder that you downloaded from Google Takeout and pop that bad boy inside the repository folder
 
 ## Run the file
 1) Nice! `cd` into the repository folder and run `python3 tourist.py` 
