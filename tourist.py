@@ -10,13 +10,13 @@ def getPastYearFiles(date):
     date_object = datetime.strptime(date, '%m-%d-%Y').date()
     months = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]
     for month in months[:date_object.month]:
-        lst.append(f'{date_object.year}/{date_object.year}_{month.upper()}.json')
+        lst.append(f'Takeout/Location History/Semantic Location History/{date_object.year}/{date_object.year}_{month.upper()}.json')
     if len(lst) < 12:
         for month in months[date_object.month:]:
             lst.append(f'{date_object.year-1}/{date_object.year-1}_{month.upper()}.json')
     return lst
 
-def filesPastYear(file_names):
+def cleanedData(file_names):
     lst = []
     for date in file_names:
         with open(date) as json_file:
@@ -55,11 +55,11 @@ def getCountry(place_id, country_code):
 
 def entriesInAmerica(entries):
     lst = []
-    progress = len(entries)
+    progress = 0
     for entry in entries:
         place_id = entry["placeVisit"]["location"]["placeId"]
-        progress -= 1
-        print(f'{progress} left!')
+        progress += 1
+        print(f'{round(progress/len(entries)*100, 2)}% complete!')
         if getCountry(place_id, "us"):
             lst.append(entry)
     return lst
@@ -72,7 +72,6 @@ def daysInAmerica(entries):
         timestamp = item["placeVisit"]["duration"]["startTimestampMs"]
         timestamp = int(timestamp) // 1000
         date = datetime.fromtimestamp(timestamp)
-        print(date)
         if date.day != previous_date.day or date.month != previous_date.month or date.year != previous_date.year:
             cleaned_list.append(item)
             previous_date = date
@@ -85,12 +84,15 @@ def getInput():
 
 if __name__ == "__main__":
     date = getInput()
-    files_past_year = filesPastYear(date)
-    no_hour_repeats = removeHourlyData(files_past_year)
+    files = getPastYearFiles(date)
+    entries_past_year = cleanedData(files)
+    no_hour_repeats = removeHourlyData(entries_past_year)
     entries_in_America = entriesInAmerica(no_hour_repeats)
     days = daysInAmerica(entries_in_America)
-    print(f'Days spend in the US: {len(days)}')
+    print(f'Days spent in the US: {len(days)}')
     print(f'Tourist Days left in the US: {182 - len(days)}')
+
+
 
 
 
