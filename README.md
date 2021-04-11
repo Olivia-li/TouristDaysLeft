@@ -12,7 +12,7 @@ Go to [Google Takeout](https://takeout.google.com/settings/takeout) and check "L
 1) Clone my repo into whatever directly of your choosingCancel changes
 2) Make sure you've installed crystal
 3) Go to [Google's "Get an API Key" guide](https://developers.google.com/places/web-service/get-api-key) and get yourself an API key. 
-4) run `echo API_KEY=<your API key here> >> .env.cr` inside of the directory you cloned the repo in
+4) run `echo API_KEY=your API key here >> .env.cr` inside of the directory you cloned the repo in
 5) Place the yearly files directly into the repo directory. The yearly files should be located in `/Takeout/Location History/Semantic Location History/`
 
 ## Run the file
