@@ -20,6 +20,7 @@ end
 def placeid_to_country(place_id)
   response = HTTP::Client.get "https://maps.googleapis.com/maps/api/place/details/json?key=#{API_KEY}&place_id=#{place_id}"
   json = JSON.parse(response.body.to_s)["result"]["address_components"]
+  return [json[5]["long_name"], json[6]["long_name"]]
 end
 
 def get_day(ms)
